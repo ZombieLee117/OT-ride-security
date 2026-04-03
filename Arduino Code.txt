@@ -1,0 +1,61 @@
+Arduino Code 
+
+-----------------------------------------------------
+const int greenLED = 12;
+const int redLED = 13;
+
+const int estopButton = 2;
+const int resetButton = 3;
+const int startButton = 4;
+
+bool rideRunning = false;
+bool estopLatched = false;
+
+void setup() {
+  pinMode(greenLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+
+  pinMode(estopButton, INPUT_PULLUP);
+  pinMode(resetButton, INPUT_PULLUP);
+  pinMode(startButton, INPUT_PULLUP);
+
+  digitalWrite(greenLED, LOW);
+  digitalWrite(redLED, LOW);
+}
+
+void loop() {
+  int estopState = digitalRead(estopButton);
+  int resetState = digitalRead(resetButton);
+  int startState = digitalRead(startButton);
+
+  // E-STOP always wins and latches a fault
+  if (estopState == LOW) {
+    rideRunning = false;
+    estopLatched = true;
+  }
+
+  // Reset only clears the fault, does not start the ride
+  if (resetState == LOW && estopLatched == true) {
+    estopLatched = false;
+    rideRunning = false;
+  }
+
+  // Start only works if no fault is active
+  if (startState == LOW && estopLatched == false) {
+    rideRunning = true;
+  }
+
+  // Output logic
+  if (estopLatched) {
+    digitalWrite(greenLED, LOW);
+    digitalWrite(redLED, HIGH);
+  } else if (rideRunning) {
+    digitalWrite(greenLED, HIGH);
+    digitalWrite(redLED, LOW);
+  } else {
+    digitalWrite(greenLED, LOW);
+    digitalWrite(redLED, LOW);
+  }
+
+  delay(50);
+}
