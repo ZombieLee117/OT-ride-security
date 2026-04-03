@@ -1,0 +1,22 @@
+Python code
+
+$port = New-Object System.IO.Ports.SerialPort COM4,9600,None,8,one
+$port.Open()
+Start-Sleep -Seconds 2
+
+Write-Host "Connected to Arduino on COM4"
+Write-Host "Type START, STOP, STATUS (or EXIT to quit)"
+
+while ($true) {
+    $cmd = Read-Host "Command"
+
+    if ($cmd -eq "EXIT") {
+        break
+    }
+
+    $port.WriteLine($cmd)
+    Write-Host "Sent: $cmd"
+}
+
+$port.Close()
+Write-Host "Serial port closed."
