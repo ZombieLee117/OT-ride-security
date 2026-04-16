@@ -160,6 +160,9 @@ See included media:
 Adrian Benton  
 Cybersecurity (SOC / OT Security Focus)
 
+Charlie Caputo
+Intelligent System Engineer
+
 ---
 
 ## Notes
